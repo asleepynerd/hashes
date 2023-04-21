@@ -42,8 +42,9 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-    if (argc == 2 && strcmp(argv[1], "--version") or strcmp(argv[1], "-v") == 0) {
-        cout << "sha1024 version " << VERSION << endl;
+    // Version Argument, can be -v or --version
+    if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
+        cout << "Version: " << VERSION << endl;
         return 0;
     }
 	
