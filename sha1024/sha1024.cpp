@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <math.h>
+// include the config file
+#include "config.h"
 
 
 
@@ -39,6 +41,11 @@ int main(int argc, char** argv)
 		cerr << "Usage: ./sha1024 <message>" << endl;
 		return 1;
 	}
+
+    if (argc == 2 && strcmp(argv[1], "--version") or strcmp(argv[1], "-v") == 0) {
+        cout << "sha1024 version " << VERSION << endl;
+        return 0;
+    }
 	
 	//Get the message from the command line
 	string messageString = argv[1];
