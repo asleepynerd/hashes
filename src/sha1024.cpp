@@ -7,9 +7,7 @@
 // include the config file
 #include "config.h"
 
-
-
-//Defining constants
+// Defining constants
 
 #define BLOCK_SIZE 1024
 #define WORD_SIZE 32
@@ -26,29 +24,32 @@
 
 using namespace std;
 
-//Defining functions
+// Defining functions
 
-void padBlock(unsigned char* block, int messageSize);
-void expandMessage(unsigned int* message, unsigned char* block);
-void processBlock(unsigned int* message, unsigned int* h);
+void padBlock(unsigned char *block, int messageSize);
+void expandMessage(unsigned int *message, unsigned char *block);
+void processBlock(unsigned int *message, unsigned int *h);
 unsigned int rotateRight(unsigned int x, int n);
 unsigned int rotateLeft(unsigned int x, int n);
-void printHexString(unsigned int* h);
+void printHexString(unsigned int *h);
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-	if (argc != 2) {
+	if (argc != 2)
+	{
 		cerr << "Usage: ./sha1024 <message>" << endl;
 		return 1;
 	}
 
-    // Version Argument, can be -v or --version
-    if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
-        cout << "Version: " << VERSION << endl;
-        return 0;
-    }
-	
-	if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+	// Version Argument, can be -v or --version
+	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
+	{
+		cout << "Version: " << VERSION << endl;
+		return 0;
+	}
+
+	if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)
+	{
 		cout << "Usage: ./sha1024 <message>" << endl;
 		cout << "Options:" << endl;
 		cout << " -v, --version\t\tPrint the version number" << endl;
@@ -56,64 +57,73 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	//Get the message from the command line
+	// Get the message from the command line
 	string messageString = argv[1];
 	int messageSize = messageString.length();
-	
-	//Pad the message
+
+	// Pad the message
 	unsigned char block[BLOCK_SIZE];
-	for (int i = 0; i < messageSize; i++) {
+	for (int i = 0; i < messageSize; i++)
+	{
 		block[i] = messageString[i];
 	}
 	padBlock(block, messageSize);
-	
-	//Expand the message
+
+	// Expand the message
 	unsigned int message[16];
 	expandMessage(message, block);
-	
-	//Initialize the h values
+
+	// Initialize the h values
 	unsigned int h[8] = {IV, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
-	
-	//Process the message
+
+	// Process the message
 	processBlock(message, h);
-	
-	//Print the result
+
+	// Print the result
 	printHexString(h);
-	
+
 	return 0;
 }
 
-void padBlock(unsigned char* block, int messageSize) {
-	//Calculate the number of 0s to pad
+void padBlock(unsigned char *block, int messageSize)
+{
+	// Calculate the number of 0s to pad
 	int padSize = BLOCK_SIZE - messageSize;
-	
-	//Pad the block
-	for (int i = 0; i < padSize; i++) {
-		if (i == 0) {
+
+	// Pad the block
+	for (int i = 0; i < padSize; i++)
+	{
+		if (i == 0)
+		{
 			block[messageSize] = 0x80;
 		}
-		else {
+		else
+		{
 			block[messageSize + i] = 0x00;
 		}
 	}
 }
 
-void expandMessage(unsigned int* message, unsigned char* block) {
-	//Expand the message
-	for (int i = 0; i < 16; i++) {
+void expandMessage(unsigned int *message, unsigned char *block)
+{
+	// Expand the message
+	for (int i = 0; i < 16; i++)
+	{
 		message[i] = 0;
-		for (int j = 0; j < 4; j++) {
+		for (int j = 0; j < 4; j++)
+		{
 			message[i] |= (unsigned int)block[(i * 4) + j] << (8 * (3 - j));
 		}
 	}
 }
 
-void processBlock(unsigned int* message, unsigned int* h) {
-	//Initialize the round constants
+void processBlock(unsigned int *message, unsigned int *h)
+{
+	// Initialize the round constants
 	unsigned int k[16] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 						  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174};
-	
-	//Initialize the working variables
+
+	// Initialize the working variables
 	unsigned int a = h[0];
 	unsigned int b = h[1];
 	unsigned int c = h[2];
@@ -122,15 +132,16 @@ void processBlock(unsigned int* message, unsigned int* h) {
 	unsigned int f = h[5];
 	unsigned int g = h[6];
 	unsigned int h1 = h[7];
-	
-	//Perform the rounds
-	for (int i = 0; i < ROUNDS; i++) {
+
+	// Perform the rounds
+	for (int i = 0; i < ROUNDS; i++)
+	{
 		unsigned int t1 = h1 + rotateRight((a + (e ^ (b & (c ^ e))) + message[(i * 4) % 16] + k[i]), 7);
 		unsigned int t2 = (d + rotateRight((t1 + (f ^ (a & (b ^ f))) + message[(i * 4 + 1) % 16]), 11));
 		unsigned int t3 = (c + rotateRight((t2 + (g ^ (d & (a ^ g))) + message[(i * 4 + 2) % 16]), 19));
 		unsigned int t4 = (b + rotateRight((t3 + (h1 ^ (c & (d ^ h1))) + message[(i * 4 + 3) % 16]), 3));
-		
-		//Update the working variables
+
+		// Update the working variables
 		a = t4;
 		b = c;
 		c = d;
@@ -140,8 +151,8 @@ void processBlock(unsigned int* message, unsigned int* h) {
 		g = h1;
 		h1 = t1;
 	}
-	
-	//Update the h values
+
+	// Update the h values
 	h[0] += a;
 	h[1] += b;
 	h[2] += c;
@@ -152,16 +163,20 @@ void processBlock(unsigned int* message, unsigned int* h) {
 	h[7] += h1;
 }
 
-unsigned int rotateRight(unsigned int x, int n) {
+unsigned int rotateRight(unsigned int x, int n)
+{
 	return (x >> n) | (x << (WORD_SIZE - n));
 }
 
-unsigned int rotateLeft(unsigned int x, int n) {
+unsigned int rotateLeft(unsigned int x, int n)
+{
 	return (x << n) | (x >> (WORD_SIZE - n));
 }
 
-void printHexString(unsigned int* h) {
-	for (int i = 0; i < 8; i++) {
+void printHexString(unsigned int *h)
+{
+	for (int i = 0; i < 8; i++)
+	{
 		printf("%08x", h[i]);
 	}
 	printf("\n");
