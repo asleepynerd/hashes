@@ -48,6 +48,14 @@ int main(int argc, char** argv)
         return 0;
     }
 	
+	if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+		cout << "Usage: ./sha1024 <message>" << endl;
+		cout << "Options:" << endl;
+		cout << " -v, --version\t\tPrint the version number" << endl;
+		cout << " -h, --help\t\tPrint this help message" << endl;
+		return 0;
+	}
+
 	//Get the message from the command line
 	string messageString = argv[1];
 	int messageSize = messageString.length();
