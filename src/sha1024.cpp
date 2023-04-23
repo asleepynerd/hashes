@@ -35,11 +35,11 @@ void printHexString(unsigned int *h);
 
 int main(int argc, char **argv)
 {
-	if (argc != 2)
+	/*if (argc != 2)
 	{
 		cerr << "Usage: ./sha1024 <message>" << endl;
 		return 1;
-	}
+	}*/
 
 	// Version Argument, can be -v or --version
 	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
@@ -56,8 +56,83 @@ int main(int argc, char **argv)
 		cout << " -h, --help\t\tPrint this help message" << endl;
 		return 0;
 	}
+	// -f or --file argument
+
+	if (strcmp(argv[1], "-f") == 0 || strcmp(argv[1], "--file") == 0)
+	{
+		/*if (argc != 3)
+		{
+			cerr << "Usage: ./sha1024 -f <filename>" << endl;
+			return 1;
+		}*/
+		FILE *file = fopen(argv[2], "r");
+		if (file == NULL)
+		{
+			cerr << "Error: File not found" << endl;
+			return 1;
+		}
+		char *buffer = NULL;
+		size_t len = 0;
+		size_t read;
+		while ((read = getline(&buffer, &len, file)) != (size_t)-1)
+		{
+			// Hash the file
+			// Get the message from the command line
+			string messageString = buffer;
+			int messageSize = messageString.length();
+
+			// Pad the message
+			unsigned char block[BLOCK_SIZE];
+			for (int i = 0; i < messageSize; i++)
+			{
+				block[i] = messageString[i];
+			}
+			padBlock(block, messageSize);
+
+			// Expand the message
+			unsigned int message[16];
+			expandMessage(message, block);
+
+			// Initialize the h values
+			unsigned int h[8] = {IV, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
+
+			// Process the message
+			processBlock(message, h);
+
+			// Print the result
+			printHexString(h);
+		}
+		fclose(file);
+		return 0;
+	}
 
 	// Get the message from the command line
+	// if argv[1] starts with " then hash it until the next "
+	// else hash the whole thing
+	
+	if (argv[1][0] == '"')
+	{
+		// hash until the next " but do not include the "
+		string messageString = "";
+		for (int i = 1; i < argc; i++)
+		{
+			if (argv[i][strlen(argv[i]) - 1] == '"')
+			{
+				// remove the " from the end
+				argv[i][strlen(argv[i]) - 1] = '\0';
+				messageString += argv[i];
+				break;
+			}
+			else
+			{
+				messageString += argv[i];
+				messageString += " ";
+			}
+		}
+		int messageSize = messageString.length();
+		
+	}
+	
 	string messageString = argv[1];
 	int messageSize = messageString.length();
 
@@ -178,6 +253,15 @@ void printHexString(unsigned int *h)
 	for (int i = 0; i < 8; i++)
 	{
 		printf("%08x", h[i]);
+	}
+	printf("\n");
+	// Then print the key
+	for (int i = 0; i < 8; i++)
+	{
+		printf("%08x", h[i] >> 24);
+		printf("%08x", (h[i] >> 16) & 0xff);
+		printf("%08x", (h[i] >> 8) & 0xff);
+		printf("%08x", h[i] & 0xff);
 	}
 	printf("\n");
 }
