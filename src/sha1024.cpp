@@ -5,7 +5,7 @@
 #include <cstring>
 #include <math.h>
 // include the config file
-#include "config.h"
+#include "sha.h"
 
 // Defining constants
 
@@ -35,11 +35,11 @@ void printHexString(unsigned int *h);
 
 int main(int argc, char **argv)
 {
-	/*if (argc != 2)
+	if (argc != 2)
 	{
 		cerr << "Usage: ./sha1024 <message>" << endl;
 		return 1;
-	}*/
+	}
 
 	// Version Argument, can be -v or --version
 	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)

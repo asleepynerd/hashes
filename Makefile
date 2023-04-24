@@ -8,7 +8,10 @@ SRC = src
 
 BIN = bin
 
-all: init sha1024
+all: init sha1024 md7
+
+md7: $(SRC)/md7.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -o $(BIN)/md7 $(SRC)/md7.cpp
 
 sha1024: $(SRC)/sha1024.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -o $(BIN)/sha1024 $(SRC)/sha1024.cpp
