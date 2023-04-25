@@ -52,14 +52,24 @@ string USH(string input)
 
 int main(int argc, char* argv[])
 {
-	// Check for the -v flag
-	if (argc == 2 && string(argv[1]) == "-v")
-	{
-		cout << "Unicode-Secure-Hash (USH)" << VERSION << endl;
-		return 0;
+	for (int i = 0; i < argc; i++){
+		if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0){
+			cout << "Unicode-Secure-Hash (USH)" << VERSION << endl;
+			return 0;
+		}
+		// if -m or --message
+		else if (strcmp(argv[i], "-m") == 0 || strcmp(argv[i], "--message") == 0){
+			if (i + 1 < argc){
+				string hash = USH(argv[i + 1]);
+				cout << hash << endl;
+				return 0;
+			}
+			else{
+				cout << "Enter a message to hash" << endl;
+				return -1;
+			}
+		}
 	}
-
-	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
 	// Check for the correct number of arguments
 	if (argc != 2)
 	{
@@ -69,9 +79,9 @@ int main(int argc, char* argv[])
 	
 	// Read the input file
 	string input = "";
-	ifstream fin(argv[1]);
+	ifstream file(argv[1]);
 	string line;
-	while (getline(fin, line))
+	while (getline(file, line))
 		input += line;
 	
 	// Generate and print the hash
