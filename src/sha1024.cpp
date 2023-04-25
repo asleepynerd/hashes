@@ -21,7 +21,6 @@
 #define SIGMA5 0xaaaaaaaa
 #define SIGMA6 0xcccccccc
 #define SIGMA7 0x80000000
-
 using namespace std;
 
 // Defining functions

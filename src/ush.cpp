@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <cstdint>
 #include <random>
+#include <fstream>
+#include <cstring>
+#include <math.h>
 
 #include "ush.h"
 
@@ -55,11 +58,12 @@ int main(int argc, char* argv[])
 		cout << "Unicode-Secure-Hash (USH)" << VERSION << endl;
 		return 0;
 	}
-	
+
+	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
 	// Check for the correct number of arguments
 	if (argc != 2)
 	{
-		cout << "Usage: ush <input-file-name> [-v]" << endl;
+		cout << "Usage: ush <input-file-name> [-v] \nMade By imjoshie(Joshie#5868)" << endl;
 		return -1;
 	}
 	

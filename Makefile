@@ -10,7 +10,7 @@ BIN = bin
 
 all: init sha1024 md7 ush
 
-lanman2: $(SRC)/ush.cpp
+ush: $(SRC)/ush.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -o $(BIN)/ush $(SRC)/ush.cpp
 
 md7: $(SRC)/md7.cpp
