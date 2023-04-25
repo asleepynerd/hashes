@@ -29,7 +29,7 @@ string USH(string input)
 	string hash = "";
 	
 	// Iterate over the input string
-	for (int i = 0; i < input.length(); i++)
+	for (size_t i = 0; i < input.length(); i++)
 	{
 		// Convert the current character to its unicode value
 		int unicode_val = (int)input[i];
@@ -40,7 +40,7 @@ string USH(string input)
 		// Convert the xor value to a hexadecimal string
 		string hex_val = to_string(xor_val);
 		string hex_str = "";
-		for (int j = 0; j < hex_val.length(); j++)
+		for (size_t j = 0; j < hex_val.length(); j++)
 			hex_str += hex_val[j];
 		
 		// Append the hexadecimal string to the hash
