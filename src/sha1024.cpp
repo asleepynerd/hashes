@@ -127,9 +127,7 @@ int main(int argc, char **argv)
 				messageString += argv[i];
 				messageString += " ";
 			}
-		}
-		int messageSize = messageString.length();
-		
+		}	
 	}
 	
 	string messageString = argv[1];
