@@ -76,4 +76,4 @@ License
 
 This program is provided under the [MIT License](LICENSE).
 
-Feel free to use and modify the code according to your needs. If you have any questions or encounter issues, please create an [issue](https://github.com/joshiewtf/hashes/issues) in the GitHub repository.
+Feel free to use and modify the code according to your needs. If you have any questions or encounter issues, please create an [issue](https://github.com/joshiewtf/hashes/issues) in the GitHub repository. I'll be happy to help you out.
