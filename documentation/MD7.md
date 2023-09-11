@@ -1,4 +1,3 @@
-Sure, here's a README for the provided C++ program that implements the MD7 message digest algorithm:
 
 MD7 Message Digest Calculator
 =============================

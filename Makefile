@@ -4,6 +4,8 @@ INCLUDE = -I include
 SRC = src
 BIN = bin
 
+VERSION = 1.1.0
+
 # List of source files
 USH_SRC = $(SRC)/ush.cpp
 MD7_SRC = $(SRC)/md7.cpp
