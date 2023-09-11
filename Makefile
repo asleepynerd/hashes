@@ -19,6 +19,15 @@ CRC64_OBJ = $(BIN)/crc64.o
 # Targets
 all: init $(BIN)/ush $(BIN)/md7 $(BIN)/sha1024 $(BIN)/crc64
 
+ush: init $(BIN)/ush
+
+md7: init $(BIN)/md7
+
+sha1024: init $(BIN)/sha1024
+
+crc64: init $(BIN)/crc64
+
+
 $(BIN)/ush: $(USH_SRC)
 	$(CC) $(CFLAGS) $(INCLUDE) -c -o $(USH_OBJ) $(USH_SRC)
 	$(CC) $(CFLAGS) $(INCLUDE) -o $(BIN)/ush $(USH_OBJ)

@@ -8,6 +8,17 @@
 // Constans
 const uint64_t CRC64_PRIME = 0x95AC9329AC4BC9B5;
 const uint64_t CRC64_INITIAL = 0xFFFFFFFFFFFFFFFF;
+/**
+ * @brief Lookup table for CRC-64 checksum calculation.
+ * 
+ * This table is used to calculate the CRC-64 checksum of a given input data. It is a constant array of 256 uint64_t values.
+ * Each value in the array is the result of a CRC-64 calculation on a single byte of input data. The table is used to speed up
+ * the calculation of the CRC-64 checksum by allowing the algorithm to process multiple bytes of input data at once.
+ * 
+ * The CRC-64 algorithm is commonly used for error detection in data transmission and storage systems.
+ * 
+ * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+ */
 const uint64_t crc_table[] = {
     0x0000000000000000, 0x01B0000000000000, 0x0360000000000000, 0x02D0000000000000, 
     0x06C0000000000000, 0x0770000000000000, 0x05A0000000000000, 0x0410000000000000, 
@@ -102,12 +113,17 @@ int main(int argc, char **argv) {
         return 0;
     }
     //help command
-    if (argc == 2 && strcmp(argv[1], "--help") == 0) {
-        std::cout << "Usage: crc64 [input data]" << std::endl;
+    /*if (argc == 2 && strcmp(argv[1], "--help") == 0) {
+        std::cout << "Help Usage: crc64 [input data]" << std::endl;
+        return 0;
+    }*/
+    //rewrite this to include -h and --help
+    if (argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
+        std::cout << "Help Usage: crc64 [input data]" << std::endl;
         return 0;
     }
     //version command
-    if (argc == 2 && strcmp(argv[1], "--version") == 0) {
+    if (argc == 2 && (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)) {
         std::cout << "Version: " << VERSION << std::endl;
         return 0;
     }
