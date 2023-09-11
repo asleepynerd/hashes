@@ -18,14 +18,22 @@
         - name: build
           run: |
             make all
+        - name: "Get date"
+          id: date
+          run: |
+            echo "::set-output name=date::$(date +'%Y-%m-%d')"
           
   
         - uses: "marvinpinto/action-automatic-releases@latest"
+          env:
+            DATE: ${{ steps.date.outputs.date }}
           with:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             automatic_release_tag: "latest"
             prerelease: true
-            title: "Development Build - $(date +'%Y-%m-%d %H:%M:%S')"
+            title: "Development Build - ${{ env.DATE }}"
             files: |
               LICENSE.txt
-              ./bin/*
+              #dont include the .o files in ./bin
+              bin/*
+              !bin/*.o
