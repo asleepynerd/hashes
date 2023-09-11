@@ -31,17 +31,43 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         path: ./bin
-    #then upload to github release with latest tag. increment the version the version defined in the makefile under the variable VERSION
+    
+    - uses: pCYSl5EDgo/cat@master
+      id: cat
+      with:
+        path: ./VERSION
+        logLevel: ${{ github.event.inputs.logLevel }}
+    #then upload to github release with latest tag. The version will be set from the file VERSION.
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1.0.0
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: ${{ steps.cat.outputs.version }}
+      with:
+        tag_name: ${{ steps.cat.outputs.version }}
+        release_name: Release ${{ steps.cat.outputs.version }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Changes in this Release
-          - First Release
-        draft: false
-        prerelease: false
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ./bin
+        asset_name: bin
+        asset_content_type: application/zip
+    - name: Upload All Seperately
+    #basically do a for loop for each file in the ./bin folder and upload it to the release.
+      run: |
+        for file in ./bin/*; do
+          echo "Uploading $file"
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: $(file -b --mime-type $file)" \
+            --data-binary @$file \
+            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${{ steps.create_release.outputs.id }}/assets?name=$(basename $file)"
+        done
