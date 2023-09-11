@@ -1,75 +1,40 @@
-name: Build and Deploy 
+# automatically build and release the binaries in ./bin folder. use make all to build all binaries. upload load them to a release. get the version from the VERSION file.
+#build.yml - This is a github action file that will build the binaries and upload them to a release. It will also update the version in the VERSION file.
+
+# .github/workflows/build.yml
+name: build
 
 on:
   push:
-    tags:
-      - '*'
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
-  
+    branches:
+      - master
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
-    - name: Build with g++
-      run: make
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.1.4
-      with:
-        path: ./bin
-    
-    - uses: pCYSl5EDgo/cat@master
-      id: cat
-      with:
-        path: ./VERSION
-        logLevel: ${{ github.event.inputs.logLevel }}
-    #then upload to github release with latest tag. The version will be set from the file VERSION.
+    - name: Build
+      run: make all
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: ${{ steps.cat.outputs.version }}
       with:
-        tag_name: ${{ steps.cat.outputs.version }}
-        release_name: Release ${{ steps.cat.outputs.version }}
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
     - name: Upload Release Asset
-      id: upload-release-asset 
+      id: upload-release-asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ./bin
-        asset_name: bin
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/
+        asset_name: bin.zip
         asset_content_type: application/zip
-    - name: Upload All Seperately
-    #basically do a for loop for each file in the ./bin folder and upload it to the release.
-      run: |
-        for file in ./bin/*; do
-          echo "Uploading $file"
-          curl \
-            -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: $(file -b --mime-type $file)" \
-            --data-binary @$file \
-            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${{ steps.create_release.outputs.id }}/assets?name=$(basename $file)"
-        done
+
