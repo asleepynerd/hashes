@@ -33,7 +33,7 @@
             prerelease: true
             title: "Development Build - ${{ env.DATE }}"
             files: |
-              LICENSE.txt
-              #dont include the .o files in ./bin
-              bin/*
-              !bin/*.o
+              bin/crc64
+              bin/sha1024
+              bin/md7
+              bin/ush

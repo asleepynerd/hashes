@@ -22,5 +22,7 @@
               repo_token: "${{ secrets.GITHUB_TOKEN }}"
               prerelease: false
               files: |
-                LICENSE.txt
-                ./bin/*
+                bin/crc64
+                bin/sha1024
+                bin/md7
+                bin/ush
