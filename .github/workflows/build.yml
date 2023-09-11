@@ -4,7 +4,7 @@
     on:
       push:
         tags:
-          - "v*.*.*"
+          - "v*"
     
     jobs:
       tagged-release:
@@ -13,9 +13,9 @@
     
         steps:
           # ...
-          - name: "Build & test"
+          - name: "Build"
             run: |
-              make 
+              make all
               echo "done!"
     
           - uses: "marvinpinto/action-automatic-releases@latest"
