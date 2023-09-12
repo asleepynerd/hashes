@@ -22,6 +22,14 @@
           id: date
           run: |
             echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        - name: "Zip binaries with tag"
+          env:
+            DATE: ${{ steps.date.outputs.date }}
+          run: |
+            zip -r binaries-${{ env.DATE }}.zip ./bin/crc64 ./bin/sha1024 ./bin/md7 ./bin/ush
+            echo "done!"
+    
+
           
   
         - uses: "marvinpinto/action-automatic-releases@latest"

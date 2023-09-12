@@ -18,6 +18,10 @@
             run: |
               make all
               echo "done!"
+          - name: "Zip binaries with tag"
+            run: |
+              zip -r binaries-${{ github.ref }}.zip ./bin/crc64 ./bin/sha1024 ./bin/md7 ./bin/ush
+              echo "done!"
     
           - uses: "marvinpinto/action-automatic-releases@latest"
             with:
@@ -28,3 +32,4 @@
                 bin/sha1024
                 bin/md7
                 bin/ush
+                binaries.zip
