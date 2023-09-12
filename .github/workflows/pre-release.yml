@@ -45,3 +45,4 @@
               bin/sha1024
               bin/md7
               bin/ush
+              binaries-${{ env.DATE }}.zip
