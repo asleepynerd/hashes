@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <math.h>
+#include <fstream>
+#include <sstream>
+#include <vector>
 // include the config file
 #include "sha.h"
 
@@ -77,7 +80,10 @@ int main(int argc, char **argv)
 		char *buffer = NULL;
 		size_t len = 0;
 		size_t read;
-		while ((read = getline(&buffer, &len, file)) != (size_t)-1)
+		//while ((read = getline(&buffer, &len, file)) != (size_t)-1) // no matching function for call to ‘getline(char**, size_t*, FILE*&)’ - only happens on windows. Works fine on linux. need to debug. must come up with alternative.
+		// dereferencing pointer to incomplete type ‘FILE {aka struct _iobuf}’
+		//so maybe put a * in front of file?
+		while ((read = getline(&buffer, &len, *file)) != (size_t)-1)
 		{
 			// Hash the file
 			// Get the message from the command line
