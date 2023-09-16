@@ -71,11 +71,11 @@ int main(int argc, char **argv)
 			cerr << "Usage: ./sha1024 -f <filename>" << endl;
 			return 1;
 		}*/
-		FILE *file = fopen(argv[2], "r");
-		if (file == NULL)
+		ifstream file(argv[2]);
+		if (!file.is_open())
 		{
-			cerr << "Error: File not found" << endl;
-			return 1;
+		    cerr << "Error: File not found" << endl;
+		    return 1;
 		}
 		char *buffer = NULL;
 		size_t len = 0;
@@ -83,6 +83,9 @@ int main(int argc, char **argv)
 		//while ((read = getline(&buffer, &len, file)) != (size_t)-1) // no matching function for call to ‘getline(char**, size_t*, FILE*&)’ - only happens on windows. Works fine on linux. need to debug. must come up with alternative.
 		// dereferencing pointer to incomplete type ‘FILE {aka struct _iobuf}’
 		while ((read = getline(&buffer, &len, file)) != (size_t)-1)
+		
+		string line;
+		while (getline(file, line))
 		{
 			// Hash the file
 			// Get the message from the command line
