@@ -6,7 +6,7 @@
 #include "crc64.h"
 
 // Constans
-const uint64_t CRC64_PRIME = 0x95AC9329AC4BC9B5;
+
 const uint64_t CRC64_INITIAL = 0xFFFFFFFFFFFFFFFF;
 /**
  * @brief Lookup table for CRC-64 checksum calculation.
@@ -128,7 +128,7 @@ uint64_t crc64_update(const char *data, size_t length, uint64_t crc) {
         crc = (crc >> 8) ^ crc_table[crc & 0xFF];
     }
     return crc;
-}
+}*/
 
 /*void crc64(const char *data, size_t length) {
     uint64_t crc = CRC64_INITIAL;
