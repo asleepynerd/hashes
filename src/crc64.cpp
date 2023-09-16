@@ -86,6 +86,8 @@ const uint64_t crc_table[] = {
     0x9240000000000000, 0x93F0000000000000, 0x9120000000000000, 0x9090000000000000
 };
 
+//remake the algorithm so the format is similar to crc32. e.g: 12f90801
+
 // Function Prototypes
 uint64_t crc64_update(const char *data, size_t length, uint64_t crc);
 void crc64(const char *data, size_t length);
@@ -99,12 +101,53 @@ uint64_t crc64_update(const char *data, size_t length, uint64_t crc) {
     return crc;
 }
 
-void crc64(const char *data, size_t length) {
+/*void crc64(const char *data, size_t length) {
     uint64_t crc = CRC64_INITIAL;
     crc = crc64_update(data, length, crc);
     crc ^= CRC64_INITIAL;
     fprintf(stderr,"64bit CRC: 0x%08X%08X\n", (uint32_t)(crc >> 32), (uint32_t)(crc & 0xFFFFFFFF));
+} */
+
+// this keeps returning 0x3063600000000000
+// fix this so it returns a proper crc64 checksum
+void crc64(const char *data, size_t length) {
+    uint64_t crc = CRC64_INITIAL;
+    crc = crc64_update(data, length, crc);
+    crc ^= CRC64_INITIAL;
+    std::cout << "64bit CRC: 0x" << std::hex << crc << std::endl;
 }
+
+/*// Function Prototypes
+uint64_t crc64_update(const char *data, size_t length, uint64_t crc);
+void crc64(const char *data, size_t length);
+
+// Function Definitions
+uint64_t crc64_update(const char *data, size_t length, uint64_t crc) {
+    for (size_t i = 0; i < length; ++i) {
+        crc ^= (uint64_t) data[i];
+        crc = (crc >> 8) ^ crc_table[crc & 0xFF];
+    }
+    return crc;
+}
+
+/*void crc64(const char *data, size_t length) {
+    uint64_t crc = CRC64_INITIAL;
+    crc = crc64_update(data, length, crc);
+    crc ^= CRC64_INITIAL;
+    fprintf(stderr,"64bit CRC: 0x%08X%08X\n", (uint32_t)(crc >> 32), (uint32_t)(crc & 0xFFFFFFFF));
+} */
+
+// this keeps returning 0x3063600000000000
+// fix this so it returns a proper crc64 checksum
+/*
+void crc64(const char *data, size_t length) {
+    uint64_t crc = CRC64_INITIAL;
+    crc = crc64_update(data, length, crc);
+    crc ^= CRC64_INITIAL;
+    std::cout << "64bit CRC: 0x" << std::hex << crc << std::endl;
+}*/
+
+
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -126,6 +169,26 @@ int main(int argc, char **argv) {
     if (argc == 2 && (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)) {
         std::cout << "Version: " << VERSION << std::endl;
         return 0;
+    }
+
+    //file command
+    if (argc == 3 && (strcmp(argv[1], "-f") == 0 || strcmp(argv[1], "--file") == 0)) {
+        // get the file and open it.
+        FILE *file = fopen(argv[2], "r");
+        if (file == NULL) {
+            std::cerr << "Error: File not found" << std::endl;
+            return 1;
+        }
+        // read the file
+        char *buffer = NULL;
+        size_t len = 0;
+        size_t read;
+        while ((read = getline(&buffer, &len, file)) != (size_t)-1)
+        {
+            crc64(buffer, read);
+            return 0;
+        }
+        
     }
         
     // Getinput data

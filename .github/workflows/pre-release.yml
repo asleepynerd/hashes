@@ -7,8 +7,8 @@
         - "main"
   
   jobs:
-    pre-release:
-      name: "Pre Release"
+    build-linux:
+      name: "Build for Linux"
       runs-on: "ubuntu-latest"
   
       steps:
@@ -26,12 +26,36 @@
           env:
             DATE: ${{ steps.date.outputs.date }}
           run: |
-            zip -r binaries-${{ env.DATE }}.zip ./bin/crc64 ./bin/sha1024 ./bin/md7 ./bin/ush
+            zip -r binaries-${{ env.DATE }}-windows.zip ./bin/crc64 ./bin/sha1024 ./bin/md7 ./bin/ush
             echo "done!"
     
+    build-windows:
+      name: "Build for Windows"
+      runs-on: "windows-latest"
 
-          
-  
+      steps:
+        # ...
+        - name: "Checkout"
+          uses: "actions/checkout@v2"
+        - name: build
+          run: |
+            make all
+        - name: "Get date"
+          id: date
+          run: |
+            echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        - name: "Zip binaries with tag"
+          env:
+            DATE: ${{ steps.date.outputs.date }}
+          run: |
+            zip -r binaries-${{ env.DATE }}-windows.zip ./bin/crc64.exe ./bin/sha1024.exe ./bin/md7.exe ./bin/ush.exe
+            echo "done!"
+
+    release:
+      name: "Release"
+      needs: ["build-linux", "build-windows"]
+      runs-on: "ubuntu-latest"
+      steps:
         - uses: "marvinpinto/action-automatic-releases@latest"
           env:
             DATE: ${{ steps.date.outputs.date }}
@@ -41,8 +65,5 @@
             prerelease: true
             title: "Development Build - ${{ env.DATE }}"
             files: |
-              bin/crc64
-              bin/sha1024
-              bin/md7
-              bin/ush
-              binaries-${{ env.DATE }}.zip
+              binaries-${{ env.DATE }}-windows.zip
+              binaries-${{ env.DATE }}-linux.zip

@@ -57,7 +57,11 @@ int main(int argc, char **argv)
 	}
 	// -f or --file argument
 
-	if (strcmp(argv[1], "-f") == 0 || strcmp(argv[1], "--file") == 0)
+	if (argc == 3 && (strcmp(argv[1], "-f") == 0 || strcmp(argv[1], "--file") == 0))
+	{
+		cerr << "Usage: ./sha1024 -f <filename>" << endl;
+		return 1;
+	}
 	{
 		/*if (argc != 3)
 		{

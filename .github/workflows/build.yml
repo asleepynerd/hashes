@@ -7,8 +7,8 @@
           - "v*.*.*"
     
     jobs:
-      tagged-release:
-        name: "Tagged Release"
+      build-linux:
+        name: "Build Linux"
         runs-on: "ubuntu-latest"
     
         steps:
@@ -23,14 +23,35 @@
             run: |
               zip -r binaries-${{ github.ref_name }}.zip ./bin/crc64 ./bin/sha1024 ./bin/md7 ./bin/ush
               echo "done!"
+
+
+      build-windows:
+        name: "Build Windows"
+        runs-on: "windows-latest"
+        
+        steps:
+          - name: "Checkout"
+            uses: "actions/checkout@v2"
+          - name: "Build"
+            run: |
+              make all
+              echo "done!"
+          
+          - name: "Zip binaries with tag"
+            run: |
+              zip -r binaries-${{ github.ref_name }}-windows.zip ./bin/crc64.exe ./bin/sha1024.exe ./bin/md7.exe ./bin/ush.exe
+              echo "done!"
+
+      tagged-release:
+        name: "Tagged Release"
+        needs: ["build-linux", "build-windows"]
+        runs-on: "ubuntu-latest"
     
+        steps:
           - uses: "marvinpinto/action-automatic-releases@latest"
             with:
               repo_token: "${{ secrets.GITHUB_TOKEN }}"
               prerelease: false
               files: |
-                bin/crc64
-                bin/sha1024
-                bin/md7
-                bin/ush
-                binaries-${{ github.ref_name }}.zip
+                binaries-${{ github.ref_name }}-linux.zip
+                binaries-${{ github.ref_name }}-windows.zip

@@ -110,6 +110,6 @@ The program will read the contents of the `input.txt` file and calculate the MD7
 License
 -------
 
-This program is provided under the [MIT License](LICENSE).
+This program is provided under the [GNU GENERAL PUBLIC LICENSE](../LICENSE).
 
-Feel free to use and modify the code according to your needs. If you have any questions or encounter issues, please create an [issue](https://github.com/yourusername/md7/issues) in the GitHub repository. I'll be happy to help you out.
+Feel free to use and modify the code according to your needs. If you have any questions or encounter issues, please create an [issue](https://github.com/joshiewtf/md7/issues) in the GitHub repository. I'll be happy to help you out.

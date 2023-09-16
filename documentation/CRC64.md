@@ -74,6 +74,6 @@ The program will output the 64-bit CRC checksum in the following format:
 License
 -------
 
-This program is provided under the [MIT License](LICENSE).
+This program is provided under the [GNU GENERAL PUBLIC LICENSE](../LICENSE).
 
 Feel free to use and modify the code according to your needs. If you have any questions or encounter issues, please create an [issue](https://github.com/joshiewtf/hashes/issues) in the GitHub repository. I'll be happy to help you out.
