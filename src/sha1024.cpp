@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <math.h>
+#include <fstream>
+#include <sstream>
+#include <vector>
 // include the config file
 #include "sha.h"
 
