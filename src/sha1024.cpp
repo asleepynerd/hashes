@@ -68,16 +68,15 @@ int main(int argc, char **argv)
 			cerr << "Usage: ./sha1024 -f <filename>" << endl;
 			return 1;
 		}*/
-		FILE *file = fopen(argv[2], "r");
-		if (file == NULL)
+		ifstream file(argv[2]);
+		if (!file.is_open())
 		{
-			cerr << "Error: File not found" << endl;
-			return 1;
+		    cerr << "Error: File not found" << endl;
+		    return 1;
 		}
-		char *buffer = NULL;
-		size_t len = 0;
-		size_t read;
-		while ((read = getline(&buffer, &len, file)) != (size_t)-1)
+		
+		string line;
+		while (getline(file, line))
 		{
 			// Hash the file
 			// Get the message from the command line
