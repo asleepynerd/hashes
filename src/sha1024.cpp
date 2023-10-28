@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 			// Print the result
 			printHexString(h);
 		}
-		fclose(file);
+		file.close();
 		return 0;
 	}
 
